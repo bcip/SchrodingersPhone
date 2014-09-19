@@ -97,22 +97,21 @@ public class MainActivity extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			try {
-				getAccelerometer(event);
-			} catch (SPException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			getAccelerometer(event);
 		}
 	}
 
-	private void getAccelerometer(SensorEvent event) throws SPException {
+	private void getAccelerometer(SensorEvent event) {
 		wrapper.addData(event);
 		if (wrapper.isFull()) {
 			// sent the data
 			Feature ret = wrapper.build();
-			Toast.makeText(this, "Reported!", Toast.LENGTH_SHORT).show();
-			uploader.uploadRecord(new Record("Lijie", new Date(), ret));
+			try {
+				uploader.uploadRecord(new Record("Lijie", new Date(), ret));
+				Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+			} catch (SPException e) {
+				Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		// float[] values = event.values;

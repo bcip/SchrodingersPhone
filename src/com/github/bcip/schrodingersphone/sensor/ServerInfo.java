@@ -9,7 +9,7 @@ public class ServerInfo {
 	static public InetAddress serverAddress;
 	static public int port;
 
-	{
+	static {
 		try {
 			serverAddress = InetAddress.getByName("59.66.130.141");
 			port = 5641;

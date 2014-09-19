@@ -111,6 +111,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		if (wrapper.isFull()) {
 			// sent the data
 			Feature ret = wrapper.build();
+			Toast.makeText(this, "Reported!", Toast.LENGTH_SHORT).show();
 			uploader.uploadRecord(new Record("Lijie", new Date(), ret));
 		}
 

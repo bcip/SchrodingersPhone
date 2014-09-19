@@ -18,5 +18,5 @@ public class PreparedStatementSet {
 	public static String putStatement = "INSERT INTO user_record VALUES (?, ?, ?)";
 	public static String searchStatement = "SELECT time, activity FROM user_record WHERE username=?";
 	public static String getRecentStatement = "SELECT time, activity FROM user_record WHERE username=?"
-			+ " ORDERED BY time DESC FETCH FIRST ROW ONLY";
+			+ " ORDER BY time DESC FETCH FIRST ROW ONLY";
 }

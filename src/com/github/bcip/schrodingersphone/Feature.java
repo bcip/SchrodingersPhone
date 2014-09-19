@@ -44,7 +44,8 @@ public class Feature implements Serializable{
 	}
 }
 
-class FeatureOneAxis {
+class FeatureOneAxis implements Serializable{
+	private static final long serialVersionUID = 9183956352731175790L;
 	double average;
 	double standardDeviation;
 	double averageAbsoluteDifference;

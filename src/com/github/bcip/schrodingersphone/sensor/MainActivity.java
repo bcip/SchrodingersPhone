@@ -118,26 +118,26 @@ public class MainActivity extends Activity implements SensorEventListener {
 	}
 
 	private void getAccelerometer(SensorEvent event) {
-		wrapper.addData(event);
-		if (wrapper.isFull()) {
-			// sent the data
-			Feature ret = wrapper.build();
-			// try {
-			// uploader.uploadRecord(new Record("Lijie", new Date(), ret));
-			// Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
-			showMessage(predictor.predict(ret).toString());
-			// } catch (SPException e) {
-			// Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-			// }
-		}
+		// wrapper.addData(event);
+		// if (wrapper.isFull()) {
+		// // sent the data
+		// Feature ret = wrapper.build();
+		// // try {
+		// // uploader.uploadRecord(new Record("Lijie", new Date(), ret));
+		// // Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+		// showMessage(predictor.predict(ret).toString());
+		// // } catch (SPException e) {
+		// // Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+		// // }
+		// }
 
-		// float[] values = event.values;
+		float[] values = event.values;
 		// Toast.makeText(this, "" + event.timestamp,
 		// Toast.LENGTH_SHORT).show();
 		// Movement
-		// float x = values[0];
-		// float y = values[1];
-		// float z = values[2];
+		float x = values[0];
+		float y = values[1];
+		float z = values[2];
 		//
 		// float accelationSquareRoot = (x * x + y * y + z * z)
 		// / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
@@ -148,8 +148,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// return;
 		// }
 		// lastUpdate = actualTime;
-		// Toast.makeText(this, x + " " + y + " " + z,
-		// Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, x + " " + y + " " + z, Toast.LENGTH_SHORT).show();
 		// if (color) {
 		// view.setBackgroundColor(Color.GREEN);
 		// } else {

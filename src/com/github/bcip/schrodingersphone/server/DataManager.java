@@ -33,7 +33,7 @@ public class DataManager {
 				try {
 					Statement s = conn.createStatement();
 					s.execute("CREATE TABLE user_record"
-							+ "(username VARCHAR(32) NOT NULL PRIMARY KEY, "
+							+ "(username VARCHAR(32) NOT NULL, "
 							+ "time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, "
 							+ "activity VARCHAR(32) NOT NULL)");
 					return;

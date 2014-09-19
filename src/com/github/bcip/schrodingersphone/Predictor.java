@@ -1,7 +1,6 @@
 package com.github.bcip.schrodingersphone;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -23,6 +22,7 @@ public class Predictor {
 		}
 	}
 
+	// <<<<<<< HEAD
 	public void load(InputStream in) throws IOException {
 		Scanner sc = new Scanner(in);
 		for (int i = 0; i < State.NUM_STATES; ++i) {
@@ -32,6 +32,8 @@ public class Predictor {
 		}
 	}
 
+	// =======
+	// >>>>>>> 77c5a4be0d9f899289da7e1ae2923b4ba16133f1
 	public State predict(Feature feature) {
 		double[] v = feature.make();
 		int by = -1;

@@ -16,17 +16,10 @@ public class Uploader {
 	}
 
 	public void uploadRecord(Record record) throws SPException {
-		SPMessage request = SPMessage.newPutRequest(record);
-		Socket sock = connectHost();
-		try {
-			request.sendMessage(sock);
-			SPMessage.loadFromSocket(sock);
-		} finally {
-			closeHost(sock);
-		}
+		new myThread(record).run();
 	}
 
-	private Socket connectHost() throws SPException {
+	Socket connectHost() throws SPException {
 
 		try {
 			Socket socket = new Socket(this.host, this.port);
@@ -39,7 +32,7 @@ public class Uploader {
 		}
 	}
 
-	private void closeHost(Socket sock) throws SPException {
+	void closeHost(Socket sock) throws SPException {
 		if (sock == null) {
 			return;
 		}
@@ -54,5 +47,30 @@ public class Uploader {
 	private int port;
 
 	private static final int TIMEOUT_MILLISECONDS = 1000;
+
 	// >>>>>>> 6d3cff656e118ee87d4b2ec1163a503a2730d3c9
+	class myThread extends Thread {
+		Record record;
+
+		public myThread(Record record) {
+			// TODO Auto-generated constructor stub
+			this.record = record;
+		}
+
+		@Override
+		public void run() {
+			try {
+				SPMessage request = SPMessage.newPutRequest(record);
+				Socket sock = connectHost();
+				try {
+					request.sendMessage(sock);
+					SPMessage.loadFromSocket(sock);
+				} finally {
+					closeHost(sock);
+				}
+			} catch (Exception e) {
+
+			}
+		}
+	}
 }

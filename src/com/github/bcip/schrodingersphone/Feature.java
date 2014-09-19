@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 //import android.annotation.SuppressLint;
 
-public class Feature implements Serializable {
+public class Feature implements Serializable{
 	private static final long serialVersionUID = 4301075190469790148L;
-
+	
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
 	public final static int FEATURE_LENGTH = 43;
@@ -44,7 +44,8 @@ public class Feature implements Serializable {
 	}
 }
 
-class FeatureOneAxis {
+class FeatureOneAxis implements Serializable{
+	private static final long serialVersionUID = 9183956352731175790L;
 	double average;
 	double standardDeviation;
 	double averageAbsoluteDifference;
@@ -133,8 +134,8 @@ class FeatureOneAxis {
 
 	int add(double[] v, int cur) {
 		v[cur++] = average;
-		v[cur++] = standardDeviation;
 		v[cur++] = averageAbsoluteDifference;
+		v[cur++] = standardDeviation;
 		v[cur++] = timeBetweenPeeks;
 		for (byte i : binDistribution) {
 			v[cur++] = 1.0 * i / Feature.SEQUENCE_LENGTH;

@@ -8,6 +8,7 @@
 !src/*/*/*/*/*
 !src/*/*/*/*/*/*
 !src/*/*/*/*/*/*/*
-#!*.java
+
 !readme.md
 !.gitignore
+!coef

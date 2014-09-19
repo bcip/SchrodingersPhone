@@ -6,20 +6,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.github.bcip.schrodingersphone.Predictor;
 import com.github.bcip.schrodingersphone.network.SocketServer;
 
 public class Server {
-	public Server(String driver, String databaseURL) {
-		this(driver, databaseURL, DEFAULT_PORT);
+	public Server(String driver, String databaseURL, Predictor pd) {
+		this(driver, databaseURL, pd, DEFAULT_PORT);
 	}
 
-	public Server(String driver, String databaseURL, int port) {
-		this(driver, databaseURL, port, DEFAULT_NUM_THREADS);
+	public Server(String driver, String databaseURL, Predictor pd, int port) {
+		this(driver, databaseURL, pd, port, DEFAULT_NUM_THREADS);
 	}
 
-	public Server(String driver, String databaseURL, int port, int numThreads) {
+	public Server(String driver, String databaseURL, Predictor pd, int port, int numThreads) {
 		this.driver = driver;
 		this.databaseURL = databaseURL;
+		this.pd = pd;
 		this.port = port;
 		this.numThreads = numThreads;
 	}
@@ -69,7 +71,7 @@ public class Server {
 
 	protected void startServer() throws IOException {
 		server = new SocketServer(port);
-		server.addHandler(new ServerHandler(dm));
+		server.addHandler(new ServerHandler(this));
 		server.connect();
 		server.start();
 		infoStream.println("SocketServer started.");
@@ -116,6 +118,7 @@ public class Server {
 	protected Connection conn = null;
 	protected SocketServer server = null;
 	protected DataManager dm = null;
+	protected Predictor pd = null;
 
 	protected String driver;
 	protected String databaseURL;

@@ -84,12 +84,15 @@ public class SPMessage implements Serializable{
 	
 	public static SPMessage loadFromSocket(Socket sock) throws SPException{
 		try{
+			sock.setSoTimeout(TIMEOUT);
 			ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 			SPMessage msg = (SPMessage)in.readObject();
-			if(msg.type == STR_EXCEPTION)
+			if(msg.type.equals(STR_EXCEPTION)){
 				throw msg.spe;
+			}
 			return msg;
 		} catch (IOException e){
+			e.printStackTrace();
 			throw new SPException("Failed to read message");
 		} catch (ClassNotFoundException e){
 			throw new SPException("Failed to read message");
@@ -114,5 +117,6 @@ public class SPMessage implements Serializable{
 	public static final String STR_SEARCH = "search";
 	public static final String STR_GET_RECENT = "getRecent";
 	public static final String STR_RESP = "resp";
+	public static final int TIMEOUT = 2000;
 	
 }

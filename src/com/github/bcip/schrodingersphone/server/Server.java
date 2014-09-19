@@ -2,12 +2,10 @@ package com.github.bcip.schrodingersphone.server;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.github.bcip.schrodingersphone.network.NetworkHandler;
 import com.github.bcip.schrodingersphone.network.SocketServer;
 
 public class Server {
@@ -71,12 +69,7 @@ public class Server {
 
 	protected void startServer() throws IOException {
 		server = new SocketServer(port);
-		server.addHandler(new NetworkHandler() {
-			@Override
-			public void handle(Socket sock) {
-				// TODO Auto-generated method stub
-			}
-		});
+		server.addHandler(new ServerHandler(dm));
 		server.connect();
 		server.start();
 		infoStream.println("SocketServer started.");

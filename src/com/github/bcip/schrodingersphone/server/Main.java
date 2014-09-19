@@ -19,10 +19,7 @@ public class Main {
 		Server server = new Server(driver, databaseURL);
 		server.start();
 		try{
-			server.dm.putRecord(new Record("wang", new Date(), "sitting"));
-			Thread.sleep(1000);
-			ArrayList<Record> records = server.dm.searchRecord("wang");
-			System.out.println(records.get(0).getActivity());
+			System.in.read();
 		}
 		finally{
 			server.stop();

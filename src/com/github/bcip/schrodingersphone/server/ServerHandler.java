@@ -17,6 +17,7 @@ public class ServerHandler implements NetworkHandler {
 	
 	@Override
 	public void handle(Socket sock) {
+		//TODO
 		System.out.println("Package got.");
 		Thread thread = Thread.currentThread();
 		if(!(thread instanceof PreparedThread)){
@@ -36,7 +37,6 @@ public class ServerHandler implements NetworkHandler {
 		SPMessage response = null;
 		try{
 			SPMessage request = SPMessage.loadFromSocket(sock);
-			System.out.println(request.getType());
 			if(request.getType().equals(SPMessage.STR_PUT)){
 				response = handlePut(request);
 			}
@@ -56,13 +56,13 @@ public class ServerHandler implements NetworkHandler {
 			response = new SPMessage(new SPException("Invalid request format"));
 		}
 		response.sendMessage(sock);
+		//TODO
 		System.out.println("Package handled");
 	}
 	
 	public SPMessage handlePut(SPMessage request) throws SPException{
 		Record record = request.getRecord();
 		record.setActivity(server.pd.predict(record.getFeature()).toString());
-		System.out.println(record.getUsername() + " is " + record.getActivity() + " now.");
 		try{
 			dm.putRecord(record, pss);
 		} catch (SQLException e) {
@@ -73,13 +73,25 @@ public class ServerHandler implements NetworkHandler {
 	}
 	
 	public SPMessage handleSearch(SPMessage request)throws SPException{
-		//TODO
-		return null;
+		String username = request.getUsername();
+		Record[] records;
+		try{
+			records = (Record[])dm.searchRecord(username, pss).toArray();
+		} catch (SQLException e) {
+			throw new SPException(e.getMessage());
+		}
+		return SPMessage.newSearchResponse(records);
 	}
 	
 	public SPMessage handleGetRecent(SPMessage request)throws SPException{
-		//TODO
-		return null;
+		String username = request.getUsername();
+		Record record;
+		try{
+			record = dm.getRecentRecord(username, pss);
+		} catch (SQLException e) {
+			throw new SPException(e.getMessage());
+		}
+		return SPMessage.newGetRecentResponse(record);
 	}
 	
 	private Server server;

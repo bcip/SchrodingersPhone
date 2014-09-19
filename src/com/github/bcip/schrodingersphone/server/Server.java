@@ -69,9 +69,9 @@ public class Server {
 		dm.initDatabase();
 	}
 
-	protected void startServer() throws IOException {
+	protected void startServer() throws IOException, SQLException {
 		server = new SocketServer(port);
-		server.addHandler(new ServerHandler(this));
+		server.addHandler(new MultithreadServerHandler(this, numThreads));
 		server.connect();
 		server.start();
 		infoStream.println("SocketServer started.");

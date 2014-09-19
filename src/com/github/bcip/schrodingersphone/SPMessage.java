@@ -64,7 +64,7 @@ public class SPMessage implements Serializable{
 		return msg;
 	}
 	
-	public static SPMessage newSearchResponce(Record[] records){
+	public static SPMessage newSearchResponse(Record[] records){
 		SPMessage msg = new SPMessage(STR_RESP);
 		msg.records = records;
 		return msg;

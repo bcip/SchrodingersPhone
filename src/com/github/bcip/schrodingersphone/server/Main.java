@@ -24,12 +24,12 @@ public class Main {
 		Server server = new Server(driver, databaseURL, pd);
 		server.start();
 		try{
-			//Uploader uploader = new Uploader(InetAddress.getByName("59.66.130.141"), 5641);
-			//uploader.uploadRecord(new Record("wang", new Date(), new Feature(new double[3][43])));
+			Uploader uploader = new Uploader(InetAddress.getByName("59.66.130.141"), 5641);
+			uploader.uploadRecord(new Record("wang", new Date(), new Feature(new double[3][43])));
+			System.out.println("ok");
 			while(System.in.read() != (int)'q')
 				;
-		}
-		finally{
+		} finally{
 			server.stop();
 		}
 	}

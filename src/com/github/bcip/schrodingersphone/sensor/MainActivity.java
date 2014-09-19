@@ -154,7 +154,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// accelerometer sensors
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				SensorManager.SENSOR_DELAY_NORMAL);
+				50000);
 	}
 
 	@Override

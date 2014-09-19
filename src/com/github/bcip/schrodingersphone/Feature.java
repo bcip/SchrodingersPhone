@@ -133,8 +133,8 @@ class FeatureOneAxis {
 
 	int add(double[] v, int cur) {
 		v[cur++] = average;
-		v[cur++] = averageAbsoluteDifference;
 		v[cur++] = standardDeviation;
+		v[cur++] = averageAbsoluteDifference;
 		v[cur++] = timeBetweenPeeks;
 		for (byte i : binDistribution) {
 			v[cur++] = 1.0 * i / Feature.SEQUENCE_LENGTH;

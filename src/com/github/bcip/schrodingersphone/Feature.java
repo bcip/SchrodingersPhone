@@ -1,6 +1,7 @@
 package com.github.bcip.schrodingersphone;
 
-//import android.annotation.SuppressLint;public class Feature {
+//import android.annotation.SuppressLint;
+public class Feature {
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
 	final static int FEATURE_LENGTH = 43;

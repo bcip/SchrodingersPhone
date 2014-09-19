@@ -5,7 +5,7 @@ import android.hardware.SensorEvent;
 import com.github.bcip.schrodingersphone.Feature;
 
 public class FeatureWrapper {// wrapper feature data
-	double[][] data = new double[3][Feature.FEATURE_LENGTH];
+	double[][] data = new double[3][Feature.SEQUENCE_LENGTH];
 	int cur;
 
 	void clear() {
@@ -13,7 +13,7 @@ public class FeatureWrapper {// wrapper feature data
 	}
 
 	boolean isFull() {
-		return cur == Feature.FEATURE_LENGTH;
+		return cur == Feature.SEQUENCE_LENGTH;
 	}
 
 	void addData(SensorEvent e) {

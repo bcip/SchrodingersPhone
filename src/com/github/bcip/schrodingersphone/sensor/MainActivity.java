@@ -1,7 +1,11 @@
 package com.github.bcip.schrodingersphone.sensor;
 
+import java.util.Date;
+
 import com.example.t111.R;
 import com.github.bcip.schrodingersphone.Feature;
+import com.github.bcip.schrodingersphone.Record;
+import com.github.bcip.schrodingersphone.SPException;
 import com.github.bcip.schrodingersphone.State;
 
 import android.annotation.SuppressLint;
@@ -27,6 +31,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private View view;
 	private long lastUpdate;
 	FeatureWrapper wrapper = new FeatureWrapper();
+	Uploader uploader = new Uploader(ServerInfo.serverAddress, ServerInfo.port);
 
 	Feature featureInDoubt = null;
 
@@ -92,15 +97,21 @@ public class MainActivity extends Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			getAccelerometer(event);
+			try {
+				getAccelerometer(event);
+			} catch (SPException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void getAccelerometer(SensorEvent event) {
+	private void getAccelerometer(SensorEvent event) throws SPException {
 		wrapper.addData(event);
 		if (wrapper.isFull()) {
 			// sent the data
 			Feature ret = wrapper.build();
+			uploader.uploadRecord(new Record("Lijie", new Date(), ret));
 		}
 
 		// float[] values = event.values;

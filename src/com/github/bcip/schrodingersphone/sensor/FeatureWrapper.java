@@ -19,9 +19,12 @@ public class FeatureWrapper {// wrapper feature data
 	void addData(SensorEvent e) {
 		if (isFull())
 			return;
-		for (int i = 0; i < 3; i++) {
-			data[i][cur] = e.values[i];
-		}
+		double x = e.values[0];
+		double y = e.values[1];
+		double z = e.values[2];
+		data[0][cur] = x;
+		data[1][cur] = z;
+		data[2][cur] = y;
 		cur++;
 	}
 

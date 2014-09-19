@@ -1,9 +1,12 @@
 package com.github.bcip.schrodingersphone.sensor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 import com.example.t111.R;
 import com.github.bcip.schrodingersphone.Feature;
+import com.github.bcip.schrodingersphone.Predictor;
 import com.github.bcip.schrodingersphone.Record;
 import com.github.bcip.schrodingersphone.SPException;
 import com.github.bcip.schrodingersphone.State;
@@ -32,6 +35,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private long lastUpdate;
 	FeatureWrapper wrapper = new FeatureWrapper();
 	Uploader uploader = new Uploader(ServerInfo.serverAddress, ServerInfo.port);
+	Predictor predictor = new Predictor();
 
 	Feature featureInDoubt = null;
 
@@ -56,6 +60,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 		displayADialog(State.Walking, State.Jogging);
+		InputStream inputStream = getResources().openRawResource(R.raw.coef);
+
+		try {
+			predictor.load(inputStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Toast.makeText(this, ret.toString(), Toast.LENGTH_SHORT).show();
 	}
@@ -101,23 +113,28 @@ public class MainActivity extends Activity implements SensorEventListener {
 		}
 	}
 
+	void showMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
 	private void getAccelerometer(SensorEvent event) {
 		wrapper.addData(event);
 		if (wrapper.isFull()) {
 			// sent the data
 			Feature ret = wrapper.build();
-			try {
-				uploader.uploadRecord(new Record("Lijie", new Date(), ret));
-				Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
-			} catch (SPException e) {
-				Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-			}
+			// try {
+			// uploader.uploadRecord(new Record("Lijie", new Date(), ret));
+			// Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+			showMessage(predictor.predict(ret).toString());
+			// } catch (SPException e) {
+			// Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+			// }
 		}
 
 		// float[] values = event.values;
-		// // Toast.makeText(this, "" + event.timestamp,
-		// // Toast.LENGTH_SHORT).show();
-		// // Movement
+		// Toast.makeText(this, "" + event.timestamp,
+		// Toast.LENGTH_SHORT).show();
+		// Movement
 		// float x = values[0];
 		// float y = values[1];
 		// float z = values[2];
@@ -131,8 +148,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// return;
 		// }
 		// lastUpdate = actualTime;
-		// // Toast.makeText(this, x + " " + y + " " + z, Toast.LENGTH_SHORT)
-		// // .show();
+		// Toast.makeText(this, x + " " + y + " " + z,
+		// Toast.LENGTH_SHORT).show();
 		// if (color) {
 		// view.setBackgroundColor(Color.GREEN);
 		// } else {

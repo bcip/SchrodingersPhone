@@ -1,11 +1,12 @@
 package com.github.bcip.schrodingersphone;
 
 //import android.annotation.SuppressLint;
+
 public class Feature {
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
-	final static int FEATURE_LENGTH = 43;
-	final static int SEQUENCE_LENGTH = 200;
+	public final static int FEATURE_LENGTH = 43;
+	public final static int SEQUENCE_LENGTH = 200;
 
 	// @SuppressLint("Assert")
 	public Feature(double data[][]) {

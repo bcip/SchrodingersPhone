@@ -85,11 +85,16 @@ public class SPMessage implements Serializable{
 	public static SPMessage loadFromSocket(Socket sock) throws SPException{
 		try{
 			ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
-			return (SPMessage)in.readObject();
+			SPMessage msg = (SPMessage)in.readObject();
+			if(msg.type == STR_EXCEPTION)
+				throw msg.spe;
+			return msg;
 		} catch (IOException e){
 			throw new SPException("Failed to read message");
 		} catch (ClassNotFoundException e){
 			throw new SPException("Failed to read message");
+		} catch (NullPointerException e) {
+			throw new SPException("Invalid format");
 		}
 		
 	}

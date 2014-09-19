@@ -15,6 +15,7 @@ public class ServerHandler implements NetworkHandler {
 	
 	@Override
 	public void handle(Socket sock) {
+		System.out.println("Package got.");
 		Thread thread = Thread.currentThread();
 		PreparedStatementSet pss;
 		if(!(thread instanceof PreparedThread)){
@@ -55,8 +56,7 @@ public class ServerHandler implements NetworkHandler {
 	}
 	
 	public SPMessage handlePut(SPMessage request) throws SPException{
-		//TODO
-		return null;
+		return SPMessage.newPutResponse();
 	}
 	
 	public SPMessage handleSearch(SPMessage request)throws SPException{

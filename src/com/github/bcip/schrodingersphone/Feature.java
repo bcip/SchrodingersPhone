@@ -1,8 +1,12 @@
 package com.github.bcip.schrodingersphone;
 
+import java.io.Serializable;
+
 //import android.annotation.SuppressLint;
 
-public class Feature {
+public class Feature implements Serializable{
+	private static final long serialVersionUID = 4301075190469790148L;
+	
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
 	public final static int FEATURE_LENGTH = 43;

@@ -1,12 +1,12 @@
 package com.github.bcip.schrodingersphone;
 
-//import android.annotation.SuppressLint;
-
-public class Feature {
+//import android.annotation.SuppressLint;public class Feature {
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
+	final static int FEATURE_LENGTH = 43;
+	final static int SEQUENCE_LENGTH = 200;
 
-	//@SuppressLint("Assert")
+	// @SuppressLint("Assert")
 	public Feature(double data[][]) {
 		// TODO Auto-generated constructor stub
 		axies = new FeatureOneAxis[3];
@@ -14,10 +14,9 @@ public class Feature {
 			axies[i] = new FeatureOneAxis(data[i]);
 
 		int n = data[0].length;
-		assert (n == 200);
+		assert (n == SEQUENCE_LENGTH);
 		for (double[] a : data)
-			assert (a.length == 200);
-		
+			assert (a.length == SEQUENCE_LENGTH);
 
 		double sum = 0;
 		for (int i = 0; i < n; ++i) {
@@ -27,20 +26,30 @@ public class Feature {
 		}
 		averageResultantAcc = sum / n;
 	}
+
+	double[] make() {
+		double[] ret = new double[FEATURE_LENGTH];
+		int cur = 0;
+		ret[cur++] = averageResultantAcc;
+		for (FeatureOneAxis i : axies) {
+			cur = i.add(ret, cur);
+		}
+		return ret;
+	}
 }
 
 class FeatureOneAxis {
 	double average;
 	double standardDeviation;
 	double averageAbsoluteDifference;
-	double[] binDistribution;
+	byte[] binDistribution;
 	double timeBetweenPeeks;
 
-	//@SuppressLint("Assert")
+	// @SuppressLint("Assert")
 	public FeatureOneAxis(double[] data) {
 		// TODO Auto-generated constructor stub
 		int n = data.length;
-		assert (n == 200);
+		assert (n == Feature.SEQUENCE_LENGTH);
 		double sum = 0;
 		for (double x : data) {
 			sum += x;
@@ -64,22 +73,19 @@ class FeatureOneAxis {
 			max = Math.max(max, x);
 		}
 
-		binDistribution = new double[10];
+		binDistribution = new byte[10];
 
 		if (Math.abs(max - min) < 1e-5) {
-			binDistribution[0] = 1;
+			binDistribution[0] = (byte) Feature.SEQUENCE_LENGTH;
 			return;
 		}
 
 		for (double x : data) {
 			double at = (x - min) / (max - min);
-			int v = (int) at * 10;
+			int v = (int) (at * 10);
 			if (v >= 10)
 				v = 9;
 			binDistribution[v]++;
-		}
-		for (int i = 0; i < 10; ++i) {
-			binDistribution[i] /= n;
 		}
 
 		evalutePeek(data);
@@ -118,5 +124,15 @@ class FeatureOneAxis {
 
 		timeBetweenPeeks = 1.0 * (peeks[2] - peeks[0]) / 2;
 	}
-}
 
+	int add(double[] v, int cur) {
+		v[cur++] = average;
+		v[cur++] = averageAbsoluteDifference;
+		v[cur++] = standardDeviation;
+		v[cur++] = timeBetweenPeeks;
+		for (byte i : binDistribution) {
+			v[cur++] = 1.0 * i / Feature.SEQUENCE_LENGTH;
+		}
+		return cur;
+	}
+}

@@ -11,6 +11,10 @@ public class MultithreadServerHandler implements NetworkHandler {
 		this.server = server;
 		this.threadPool = new ThreadPool(numThreads, server.conn);
 	}
+	
+	public void stop(){
+		threadPool.stop();
+	}
 
 	@Override
 	public void handle(Socket sock) {

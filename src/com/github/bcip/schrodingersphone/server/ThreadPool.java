@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ThreadPool {
 
     /* Array of threads in the threadpool */
-    private Thread threads[];
+    private WorkerThread[] threads;
     private BlockingQueue<Runnable> jobQueue;
 
 
@@ -20,7 +20,7 @@ public class ThreadPool {
      * @throws SQLException if exception occurs when prepare statements for threads.
      */
     public ThreadPool(int size, Connection conn) throws SQLException {
-        threads = new Thread[size];
+        threads = new WorkerThread[size];
 
         jobQueue = new LinkedBlockingQueue<Runnable>();
         
@@ -29,6 +29,13 @@ public class ThreadPool {
         	threads[i].start();
         }
         
+    }
+    
+    public void stop(){
+    	for(WorkerThread thread : threads){
+    		thread.setStop();
+    		thread.interrupt();
+    	}
     }
 
     /**
@@ -78,16 +85,19 @@ public class ThreadPool {
          */
         @Override
         public void run() {
-            while(true){
+            while(!stopped){
             	try{
             		Runnable r = threadPool.getJob();
             		if(r != null)
             			r.run();
-            	}
-            	catch(Exception e){
+            	} catch(InterruptedException e){
             		//ignore
             	}
             }
+        }
+        
+        public void setStop(){
+        	stopped = true;
         }
         
         /**
@@ -96,5 +106,7 @@ public class ThreadPool {
         public PreparedStatementSet getPreparedStatementSet(){
         	return pss;
         }
+        
+        private boolean stopped = false;
     }
 }

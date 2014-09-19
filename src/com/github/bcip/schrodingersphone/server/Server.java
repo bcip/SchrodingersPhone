@@ -79,6 +79,7 @@ public class Server {
 
 	protected void stopServer() {
 		server.stop();
+		((MultithreadServerHandler)server.getHandler()).stop();
 		infoStream.println("SocketServer stopped.");
 	}
 

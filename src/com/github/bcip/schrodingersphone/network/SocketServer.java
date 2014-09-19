@@ -105,4 +105,8 @@ public class SocketServer {
 		stopped = true;
 	}
 
+	public NetworkHandler getHandler() {
+		return handler;
+	}
+
 }

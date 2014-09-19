@@ -1,5 +1,7 @@
-package com.github.bcip.schrodingersphone.network;
+package com.github.bcip.schrodingersphone.server;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -15,14 +17,15 @@ public class ThreadPool {
      * Constructs a Threadpool with a certain number of threads.
      *
      * @param size number of threads in the thread pool
+     * @throws SQLException if exception occurs when prepare statements for threads.
      */
-    public ThreadPool(int size) {
+    public ThreadPool(int size, Connection conn) throws SQLException {
         threads = new Thread[size];
 
         jobQueue = new LinkedBlockingQueue<Runnable>();
         
         for(int i = 0; i < size; i++){
-        	threads[i] = new WorkerThread(this);
+        	threads[i] = new WorkerThread(this, conn);
         	threads[i].start();
         }
         
@@ -54,17 +57,20 @@ public class ThreadPool {
     /**
      * A thread in the thread pool.
      */
-    private class WorkerThread extends Thread {
+    private class WorkerThread extends PreparedThread {
 
         private ThreadPool threadPool;
+        private PreparedStatementSet pss;
 
         /**
          * Constructs a thread for this particular ThreadPool.
          *
          * @param pool the ThreadPool containing this thread
+         * @throws SQLException if exception occurs when prepare statements.
          */
-        public WorkerThread(ThreadPool pool) {
+        public WorkerThread(ThreadPool pool, Connection conn) throws SQLException {
             threadPool = pool;
+            pss = new PreparedStatementSet(conn);
         }
 
         /**
@@ -82,6 +88,13 @@ public class ThreadPool {
             		//ignore
             	}
             }
+        }
+        
+        /**
+         * Return the PreparedStatementSet for the Thread.
+         */
+        public PreparedStatementSet getPreparedStatementSet(){
+        	return pss;
         }
     }
 }

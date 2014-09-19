@@ -14,7 +14,6 @@ import com.github.bcip.schrodingersphone.Record;
 public class DataManager {
 	public DataManager(Connection conn) {
 		this.conn = conn;
-		// TODO;
 	}
 
 	public void initDatabase() throws SQLException {
@@ -54,10 +53,18 @@ public class DataManager {
 		}
 		Server.infoStream.println("Table user_record was checked.");
 	}
+	
+	public PreparedStatementSet prepareStatements() throws SQLException{
+		return new PreparedStatementSet(conn);
+	}
 
 	public void putRecord(Record record) throws SQLException {
 		putRecord(record, conn.prepareStatement(
-				"INSERT INTO user_record VALUES (?, ?, ?)"));
+				PreparedStatementSet.putStatement));
+	}
+	
+	public void putRecord(Record record, PreparedStatementSet pss) throws SQLException{
+		putRecord(record, pss.putRecord);
 	}
 	
 	public void putRecord(Record record,
@@ -70,9 +77,11 @@ public class DataManager {
 	
 	public ArrayList<Record> searchRecord(String username) throws SQLException {
 		return searchRecord(username, conn.prepareStatement(
-				"SELECT time, activity "
-				+ "FROM user_record "
-				+ "WHERE username=?"));
+				PreparedStatementSet.searchStatement));
+	}
+	
+	public ArrayList<Record> searchRecord(String username, PreparedStatementSet pss) throws SQLException{
+		return searchRecord(username, pss.searchRecord);
 	}
 
 	public ArrayList<Record> searchRecord(String username, 
@@ -86,6 +95,26 @@ public class DataManager {
 			ret.add(new Record(username, time, activity));
 		}
 		return ret;
+	}
+	
+	public Record getRecentRecord(String username) throws SQLException{
+		return getRecentRecord(username, conn.prepareStatement(
+				PreparedStatementSet.getRecentStatement));
+	}
+	
+	public Record getRecentRecord(String username, PreparedStatementSet pss) throws SQLException{
+		return getRecentRecord(username, pss.getRecentRecord);
+	}
+	
+	public Record getRecentRecord(String username, PreparedStatement ps) throws SQLException{
+		ps.setString(1, username);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next()){
+			Date time = rs.getTimestamp(1);
+			String activity = rs.getString(2);
+			return new Record(username, time, activity);
+		}
+		return null;
 	}
 	
 	private Connection conn;

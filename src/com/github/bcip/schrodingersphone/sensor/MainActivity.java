@@ -2,6 +2,7 @@ package com.github.bcip.schrodingersphone.sensor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 
 import com.example.t111.R;
@@ -34,7 +35,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private View view;
 	private long lastUpdate;
 	FeatureWrapper wrapper = new FeatureWrapper();
-	Uploader uploader = new Uploader(ServerInfo.serverAddress, ServerInfo.port);
+	Uploader uploader = new Uploader(ServerInfo.serverAddress, ServerInfo.port,
+			this);
 	Predictor predictor = new Predictor();
 
 	Feature featureInDoubt = null;
@@ -59,7 +61,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		Sensor sensor = sensorManager
 				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-		displayADialog(State.Walking, State.Jogging);
+		// displayADialog(State.Walking, State.Jogging);
 		InputStream inputStream = getResources().openRawResource(R.raw.coef);
 
 		try {
@@ -68,6 +70,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// try {
+		// uploader.uploadRecord(new Record("Lijie", new Date(), "Walking"));
+		// Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+		// // showMessage(predictor.predict(ret).toString());
+		// } catch (SPException e) {
+		// Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+		// }
 
 		// Toast.makeText(this, ret.toString(), Toast.LENGTH_SHORT).show();
 	}
@@ -114,30 +123,34 @@ public class MainActivity extends Activity implements SensorEventListener {
 	}
 
 	void showMessage(String message) {
-		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
 	private void getAccelerometer(SensorEvent event) {
-		// wrapper.addData(event);
-		// if (wrapper.isFull()) {
-		// // sent the data
-		// Feature ret = wrapper.build();
-		// // try {
-		// // uploader.uploadRecord(new Record("Lijie", new Date(), ret));
-		// // Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
-		// showMessage(predictor.predict(ret).toString());
-		// // } catch (SPException e) {
-		// // Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-		// // }
-		// }
+		System.out.println(event.timestamp + Arrays.toString(event.values));
 
-		float[] values = event.values;
-		// Toast.makeText(this, "" + event.timestamp,
-		// Toast.LENGTH_SHORT).show();
-		// Movement
-		float x = values[0];
-		float y = values[1];
-		float z = values[2];
+		wrapper.addData(event);
+		if (wrapper.isFull()) {
+			// sent the data
+			Feature ret = wrapper.build();
+			try {
+				uploader.uploadRecord(new Record("Lijie", new Date(), ret));
+				// Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+				// showMessage(predictor.predict(ret).toString());
+			} catch (SPException e) {
+				// Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+			} finally {
+				showMessage(predictor.predict(ret).toString());
+			}
+		}
+
+		// float[] values = event.values;
+		// // Toast.makeText(this, "" + event.timestamp,
+		// // Toast.LENGTH_SHORT).show();
+		// // Movement
+		// float x = values[0];
+		// float y = values[1];
+		// float z = values[2];
 		//
 		// float accelationSquareRoot = (x * x + y * y + z * z)
 		// / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
@@ -148,7 +161,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// return;
 		// }
 		// lastUpdate = actualTime;
-		Toast.makeText(this, x + " " + y + " " + z, Toast.LENGTH_SHORT).show();
+		// Toast.makeText(this, x + " " + y + " " + z,
+		// Toast.LENGTH_SHORT).show();
 		// if (color) {
 		// view.setBackgroundColor(Color.GREEN);
 		// } else {
@@ -170,7 +184,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// accelerometer sensors
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				50000);
+				100000);
 	}
 
 	@Override

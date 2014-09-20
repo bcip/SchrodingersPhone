@@ -1,0 +1,13 @@
+设计思路：
+本组的题目是状态检测。
+
+主要分为3个组成部分：
+1.Android数据采集端，负责采集Android上的传感器得到的数据。
+我们采用了eclipse+adt来开发，测试平台是HUAWAI A6。。
+
+2.machine learning部分：
+首先我们从网上下到了参考文献中的dataset，实现了该文中的feature提取方法。
+接下来我们尝试了各种机器学习的算法，包括SVM，神经网络，不过我们发现最简单的Logistic Regression model就已经能取得接近85%的正确率了。其它模型的改进并不显著，有些还不及这样simple的model。
+其原因应该是首先dataset数量并不多，所以大型model不太能发挥作用，其次这些feature已经很不错了。 
+所以我们出于效率等方面的考量，最后采用了Logistic Regression model作为我们的ML模型。
+我们使用了python里的sklearn库来测试和训练这些数据。

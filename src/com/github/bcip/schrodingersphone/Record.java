@@ -3,9 +3,9 @@ package com.github.bcip.schrodingersphone;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Record implements Serializable{
+public class Record implements Serializable {
 	private static final long serialVersionUID = -5313663493179017564L;
-	
+
 	public Record(String username, Date time, Feature feature) {
 		this.username = username;
 		this.time = time;

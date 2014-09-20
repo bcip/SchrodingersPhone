@@ -1,26 +1,33 @@
 package com.github.bcip.schrodingersphone.sensor;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import android.util.Log;
 
 import com.github.bcip.schrodingersphone.Record;
 import com.github.bcip.schrodingersphone.SPException;
 import com.github.bcip.schrodingersphone.SPMessage;
 
 public class Uploader {
-	public Uploader(InetAddress host, int port) {
+
+	MainActivity activity;
+
+	public Uploader(InetAddress host, int port, MainActivity activity) {
 		this.host = host;
 		this.port = port;
+		this.activity = activity;
 	}
 
 	public void uploadRecord(Record record) throws SPException {
-		new myThread(record).run();
+		new myThread(record).start();
 	}
 
 	Socket connectHost() throws SPException {
-
 		try {
 			Socket socket = new Socket(this.host, this.port);
 			socket.setSoTimeout(TIMEOUT_MILLISECONDS);
@@ -69,7 +76,10 @@ public class Uploader {
 					closeHost(sock);
 				}
 			} catch (Exception e) {
-
+				StringWriter sw = new StringWriter();
+				e.printStackTrace(new PrintWriter(sw));
+				// e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 	}

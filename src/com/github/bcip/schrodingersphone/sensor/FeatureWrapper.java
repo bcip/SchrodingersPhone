@@ -4,6 +4,13 @@ import android.hardware.SensorEvent;
 
 import com.github.bcip.schrodingersphone.Feature;
 
+/**
+ * 
+ * This wrapper extracts the feature from the data
+ * 
+ * @author wjmzbmr
+ */
+
 public class FeatureWrapper {// wrapper feature data
 	double[][] data = new double[3][Feature.SEQUENCE_LENGTH];
 	int cur;
@@ -16,6 +23,12 @@ public class FeatureWrapper {// wrapper feature data
 		return cur == Feature.SEQUENCE_LENGTH;
 	}
 
+	/**
+	 * Because the data order in our sensor and the dataset is different, we
+	 * should swap the order of y and z
+	 * 
+	 * @param e
+	 */
 	void addData(SensorEvent e) {
 		if (isFull())
 			return;

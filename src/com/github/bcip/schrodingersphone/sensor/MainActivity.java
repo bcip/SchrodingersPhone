@@ -29,6 +29,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+/**
+ * This class implements the Android client for extracting the feature from the
+ * user data collected by sensor at 20Hz. The feature is extracted for every 200
+ * samples.
+ */
+
 public class MainActivity extends Activity implements SensorEventListener {
 	private SensorManager sensorManager;
 	private boolean color = false;
@@ -40,8 +46,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 	Predictor predictor = new Predictor();
 
 	Feature featureInDoubt = null;
-
-	/** Called when the activity is first created. */
 
 	@SuppressLint("NewApi")
 	@Override
@@ -81,6 +85,15 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// Toast.makeText(this, ret.toString(), Toast.LENGTH_SHORT).show();
 	}
 
+	/**
+	 * This method will show a dialog to ask what is the user's actions from two
+	 * choice of high probability.
+	 * 
+	 * It is used to listen to the user's feedback
+	 * 
+	 * @param a
+	 * @param b
+	 */
 	public void displayADialog(final State a, final State b) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(android.R.drawable.btn_star).setTitle("Feedback")
@@ -126,6 +139,15 @@ public class MainActivity extends Activity implements SensorEventListener {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
+	/**
+	 * 
+	 * This method add the event we have got to the FeatureWrapper, when the
+	 * wrapper get enough data, it build the feature and send it to the server.
+	 * 
+	 * If the sending failed, it shows a 'Failed' message on the screen.
+	 * 
+	 * @param event
+	 */
 	private void getAccelerometer(SensorEvent event) {
 		System.out.println(event.timestamp + Arrays.toString(event.values));
 
@@ -138,45 +160,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 				// Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
 				// showMessage(predictor.predict(ret).toString());
 			} catch (SPException e) {
-				// Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
 			} finally {
 				showMessage(predictor.predict(ret).toString());
 			}
 		}
-
-		// float[] values = event.values;
-		// // Toast.makeText(this, "" + event.timestamp,
-		// // Toast.LENGTH_SHORT).show();
-		// // Movement
-		// float x = values[0];
-		// float y = values[1];
-		// float z = values[2];
-		//
-		// float accelationSquareRoot = (x * x + y * y + z * z)
-		// / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-		// long actualTime = event.timestamp;
-		// if (accelationSquareRoot >= 2) //
-		// {
-		// if (actualTime - lastUpdate < 200) {
-		// return;
-		// }
-		// lastUpdate = actualTime;
-		// Toast.makeText(this, x + " " + y + " " + z,
-		// Toast.LENGTH_SHORT).show();
-		// if (color) {
-		// view.setBackgroundColor(Color.GREEN);
-		// } else {
-		// view.setBackgroundColor(Color.RED);
-		// }
-		// color = !color;
-		// }
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-	}
-
+	/**
+	 * 50000 corresponds to 0.05s, which is the time gap for our feature.
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -184,7 +177,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// accelerometer sensors
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				100000);
+				50000);
 	}
 
 	@Override
@@ -192,5 +185,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// unregister listener
 		super.onPause();
 		sensorManager.unregisterListener(this);
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor arg0, int arg1) {
+		// TODO Auto-generated method stub
+
 	}
 }

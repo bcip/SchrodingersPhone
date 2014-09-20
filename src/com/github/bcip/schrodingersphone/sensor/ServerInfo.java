@@ -5,6 +5,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
+/**
+ * A class which stores the server's information
+ * 
+ * @author wjmzbmr
+ * 
+ */
+
 public class ServerInfo {
 	static public InetAddress serverAddress;
 	static public int port;

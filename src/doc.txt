@@ -11,3 +11,12 @@
 其原因应该是首先dataset数量并不多，所以大型model不太能发挥作用，其次这些feature已经很不错了。 
 所以我们出于效率等方面的考量，最后采用了Logistic Regression model作为我们的ML模型。
 我们使用了python里的sklearn库来测试和训练这些数据。
+
+PS:参考文献中的dataset有各种各样的问题，包括时间间隔不对，偶尔出现坏死的数据等，需要处理一下。
+测试时我们采取了cross validation的策略，按train和test分成4:1的比例。
+
+3.服务器端开发：
+
+人员分工：
+陈立杰负责Android数据采集端和Machine learning学习部分
+王钦石负责服务器端开发。

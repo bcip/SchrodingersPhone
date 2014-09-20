@@ -13,6 +13,12 @@ import com.github.bcip.schrodingersphone.Record;
 import com.github.bcip.schrodingersphone.SPException;
 import com.github.bcip.schrodingersphone.SPMessage;
 
+/**
+ * A class which upload the feature we get in client to the remote server
+ * 
+ * @author wjmzbmr
+ * 
+ */
 public class Uploader {
 
 	MainActivity activity;
@@ -55,7 +61,13 @@ public class Uploader {
 
 	private static final int TIMEOUT_MILLISECONDS = 1000;
 
-	// >>>>>>> 6d3cff656e118ee87d4b2ec1163a503a2730d3c9
+	/**
+	 * We can not access network in the main thread, so we should write a class
+	 * to do that.
+	 * 
+	 * @author wjmzbmr
+	 * 
+	 */
 	class myThread extends Thread {
 		Record record;
 

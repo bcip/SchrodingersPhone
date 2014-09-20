@@ -3,12 +3,27 @@ package com.github.bcip.schrodingersphone;
 import java.io.Serializable;
 
 //import android.annotation.SuppressLint;
+/**
+ * The following feature class implements the feature-extraction algorithm from
+ * the paper.
+ * 
+ * @author wjmzbmr
+ * 
+ */
 
-public class Feature implements Serializable{
+/**
+ * The feature class, it consists of features from 3 axies, and a overall
+ * acceleration feature
+ * 
+ * @author wjmzbmr
+ * 
+ */
+public class Feature implements Serializable {
 	private static final long serialVersionUID = 4301075190469790148L;
-	
+
 	double averageResultantAcc;
 	FeatureOneAxis[] axies;
+
 	public final static int FEATURE_LENGTH = 43;
 	public final static int SEQUENCE_LENGTH = 200;
 
@@ -33,6 +48,13 @@ public class Feature implements Serializable{
 		averageResultantAcc = sum / n;
 	}
 
+	/**
+	 * This method wrapper every feature to a double array to help the
+	 * prediction phase.
+	 * 
+	 * @return
+	 */
+
 	double[] make() {
 		double[] ret = new double[FEATURE_LENGTH];
 		int cur = 0;
@@ -44,7 +66,16 @@ public class Feature implements Serializable{
 	}
 }
 
-class FeatureOneAxis implements Serializable{
+/**
+ * This class implements the feature extraction algorithm for 1 axis
+ * 
+ * Every atrribute's name stands for its meaning, and the calculation is
+ * straight-forward
+ * 
+ * @author wjmzbmr
+ * 
+ */
+class FeatureOneAxis implements Serializable {
 	private static final long serialVersionUID = 9183956352731175790L;
 	double average;
 	double standardDeviation;
@@ -98,10 +129,14 @@ class FeatureOneAxis implements Serializable{
 		evalutePeek(data);
 	}
 
+	/**
+	 * My naive algorithm for finding the peek here: Get 3 peek in descending
+	 * order, ignore those which are too near to the old ones;
+	 * 
+	 * @param data
+	 */
+
 	void evalutePeek(double data[]) {
-		// My naive algorithm here:
-		// Get 3 peek in descending order, ignore the one which are too near to
-		// the old one;
 		int have = 0;
 		int[] peeks = new int[3];
 		int n = data.length;
